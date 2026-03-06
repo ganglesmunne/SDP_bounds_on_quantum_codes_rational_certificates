@@ -1,6 +1,17 @@
-# Mapping Functions
+# Multiplying Dict() for a constant
 
-function f4_fun(n)
+function multi(dic,cte)
+    S=Dict()
+    
+    for k in keys(dic)
+        S[k]=cte*dic[k]
+    end 
+    
+    return S 
+end 
+# Mapping Functions 
+
+function f4_fun(n) # (i,j,t,p) to a vector
     funct = Dict()
     size = 0
     for i in 0:n
@@ -16,7 +27,7 @@ function f4_fun(n)
     return funct, size
 end
 
-function f2_fun(n)
+function f2_fun(n) # (a,k) to a vector
     fun = Dict{Tuple{Int, Int}, Int}()
     count = 0
     for a in 0:n
@@ -49,15 +60,15 @@ function beta(i, j, k, m, t)
     return b
 end
 
-function multinomial_field(n,i,j,k,l)
+function multinomial_field(n,i,j,k,l,FF)
 
-    value=z^0*factorial(big(n))/(factorial(big(i))*factorial(big(j))*factorial(big(k))*factorial(big(l))*factorial(big(n-i-j-k-l)))
+    value=FF^0*factorial(big(n))/(factorial(big(i))*factorial(big(j))*factorial(big(k))*factorial(big(l))*factorial(big(n-i-j-k-l)))
     return value
 end
 
-function gamma_field(i, j, t, p, n)
+function gamma_field(i, j, t, p, n, FF)
     
-    value = (big(3)//big(1))^(i + j - t) * (big(2)//big(1))^(t - p) *  multinomial_field(n, p, t - p, i - t, j - t)
+    value = (big(3)//big(1))^(i + j - t) * (big(2)//big(1))^(t - p) *  multinomial_field(n, p, t - p, i - t, j - t, FF)
     return (value)
 
 end
