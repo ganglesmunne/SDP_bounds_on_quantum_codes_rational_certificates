@@ -113,8 +113,9 @@ function LDL(A,D)
 
     d=Matrix(undef,D,1)
     d[1]=A[1,1]
-    L=Matrix(undef,D,D)
     
+    L=Matrix(undef,D,D)
+
     for j in 2:D
        
         for s in 1:j-1
@@ -125,13 +126,13 @@ function LDL(A,D)
                 S=sum([L[j,p]*L[s,p]*d[p] for p in 1:s-1])
             end
     
-            L[j,s]=(1/d[s])*(A[j,s] - S)
+            L[j,s]=(1//d[s])*(A[j,s] - S)
             
         end
-            
+
         d[j]=A[j,j]-sum([L[j,k]^2*d[k] for k in 1:j-1])
     end
-
+    
     return d
 end
 
