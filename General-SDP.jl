@@ -30,7 +30,7 @@ function SDP(n,K,d,f4,f2,N,z)
             end
         end
     end
-
+    
     D=[]
 
     for i in 0:n
@@ -64,7 +64,7 @@ function SDP(n,K,d,f4,f2,N,z)
         push!(Q_psd,Dict_Q_psd)
         
     end
-
+    
     for i in d:n
         
         Dict_Q_psd=mergewith(+, multi(y[f4[i,0,0,0]+1],2), y[f4[i,i,i,i]+1])
@@ -80,7 +80,7 @@ function SDP(n,K,d,f4,f2,N,z)
     all_sets=[]
 
     for (i, j, t, p) in keys(f4)
-        if (t - p) % 2 == 0 && i+j-t-p >= d && i>=d && j>=d
+        if (t - p) % 2 == 0 && i != 0 && j != 0 && i+j-t-p !=0
         
             if (i, j, i + j - t - p, t-p) ∉ all_sets
                     
@@ -93,7 +93,7 @@ function SDP(n,K,d,f4,f2,N,z)
             end
         end
     end
-
+   
     for (i,j,t,p) in no_rep_key
         
         total_psd=Dict()
@@ -104,7 +104,7 @@ function SDP(n,K,d,f4,f2,N,z)
             if t - p == c - q && [i, j, i + j - t - p] in collect(permutations((a, b, a + b - c - q)))
 
                 total_psd=mergewith(+,total_psd,y[f4[a, b, c, q]+1])
-                total_psd=mergewith(+,total_psd, Q_psd[a+b-c-q-d+1])
+                total_psd=mergewith(+,total_psd, Q_psd[a+b-c-q])
                         
             end
         end
@@ -113,7 +113,6 @@ function SDP(n,K,d,f4,f2,N,z)
     end   
 
     #obj
-
 
     Dict_obj_psd=mergewith(+, D[1], Dict((:C1,0) => [-1;;],(:C2,0) => [1;;]))
 
@@ -128,7 +127,7 @@ function SDP(n,K,d,f4,f2,N,z)
 
     problem_highprecision = map(x->generic_embedding(x, g), problem)
     status, primalsol, dualsol = solvesdp(problem_highprecision)
-    # status, primalsol, dualsol = solvesdp(problem_highprecision, prec=500,step_length_threshold= 10^-16, gamma=0.5)
+   
     println([n,K,d])
     println(status)
     println(objvalue(problem_highprecision, dualsol))
@@ -144,12 +143,13 @@ R, x = polynomial_ring(QQ, :x)
 N, z = number_field(x^2 - 3, :z)
 g = sqrt(big(3)) 
 
-n,K,d=[6, 2, 3]
+n,K,d=[11, 43, 3]
 
 f4, size  = f4_fun(n)
 f2, size2 = f2_fun(n)
 
-exactsol=SDP_pure(n,K,d,f4,f2,N,z)
+
+exactsol=SDP(n,K,d,f4,f2,N,z)
 
 Y = [exactsol.matrixvars[(:Y, i)] for i in 0:size2-1]
 C = [exactsol.matrixvars[(:C1,i)][1,1]-exactsol.matrixvars[(:C2,i)][1,1] for i in 0:d-1]
