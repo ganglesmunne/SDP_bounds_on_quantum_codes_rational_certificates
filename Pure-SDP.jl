@@ -120,7 +120,7 @@ function SDP_pure(n,K,d,f4,f2,N,z)
     println(status)
     println(objvalue(problem_highprecision, dualsol))
 
-    settings=RoundingSettings(approximation_decimals=0, pseudo=false)
+    settings=RoundingSettings()
 
     _, exactsol = exact_solution(problem, primalsol,dualsol; FF=N, g=g, settings=settings)
 
