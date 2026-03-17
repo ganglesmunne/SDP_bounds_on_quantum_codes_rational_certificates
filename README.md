@@ -8,7 +8,7 @@ The folder `cerf` includes all certificates for general, pure, and self-dual cod
 
 All certificates are written in an algebraic field $\mathbb{Q}(\sqrt{3})$ using the package `Nemo.jl`, such that $z=\sqrt{3}$.
 
-The files `General-readout.ipynb`, `Pure-readout.ipynb`, and `Selfdual-readout.ipynb` read the certificates and check if they satisfy the constraints for each type of code. For all the solutions, the objective function is $1$. The positive semidefinite conditions are checked by using the LDL-decomposition and approximating $\sqrt{3}$ by two rational numbers such that $r_\ell < \sqrt{3} < r_u$ with $r_u,r_\ell \in \mathbb{Q}$. Then, given an element $a+bz \in \mathbb{Q}(\sqrt{3})$, one can use the fact that 
+The files `General-readout.ipynb`, `Pure-readout.ipynb`, and `Selfdual-readout.ipynb` read the certificates and check if they satisfy the constraints for each type of code. For all the solutions, the objective function is $1$. The positive semidefinite conditions are checked by using the LDL-decomposition, which simplifies the problem on checking whether elements like $a+bz \in \mathbb{Q}(\sqrt{3})$ are positive. This can be done by approximating $\sqrt{3}$ by two rational numbers such that $r_\ell < \sqrt{3} < r_u$ with $r_u,r_\ell \in \mathbb{Q}$ and then,
 
 1. if $b\geq 0$, $a+br_\ell \geq 0$ implies $a+b\sqrt{3} \geq 0$,
   
