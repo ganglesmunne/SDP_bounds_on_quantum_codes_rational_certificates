@@ -14,6 +14,8 @@ The files `General-readout.ipynb`, `Pure-readout.ipynb`, and `Selfdual-readout.i
   
 2. if $b/a \leq 0$, $a+br_u \geq 0$ implies $a+b\sqrt{3} \geq 0$.
 
+3. if $a=0$, $b \geq 0$ implies $a+b\sqrt{3} \geq 0$.
+
 The files `General-SDP.jl`, `Pure-SDP.jl`, and `Selfdual-SDP.jl` contain the SDP program used to find the exact feasibility certificates. They use the Julia package `ClusteredLowRankSolver.jl`, which is a high-precision primal-dual interior-point solver. This solver also provides a heuristic rounding functionality for extracting solutions over algebraic numbers. 
 
 # Links
