@@ -1,4 +1,4 @@
-# Exact SDP bounds on quantum codes
+# SDP bounds on quantum codes: rational certificates
 
 This repository complements the work from URL, which disproves the existence of $18$ qubit quantum codes with parameters $((n,K,\delta))_2$.
 
