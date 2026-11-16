@@ -76,41 +76,68 @@ function SDP(n,K,d,f4,f2,N,z)
         push!(Q_psd,Dict_Q_psd)
     end
 
-    no_rep_key=[]
-    all_sets=[]
-
-    for (i, j, t, p) in keys(f4)
+    for (i,j,t,p) in keys(f4) 
         if (t - p) % 2 == 0 && i != 0 && j != 0 && i+j-t-p !=0
-        
-            if (i, j, i + j - t - p, t-p) ∉ all_sets
-                    
-                perm=collect(permutations((i, j, i + j - t - p)))
-                sets=[(a,b,c,t-p) for (a,b,c) in perm]
-                
-                append!(all_sets, sets)
-                push!(no_rep_key,(i,j,t,p))
+
+            total_psd=Dict()
+            total_free=Dict()
+
+            for (a, b, c, q) in keys(f4) 
+            
+                if t - p == c - q  && [i, j, i + j - t - p] in collect(permutations((a, b, a + b - c - q)))
+
+                    total_psd=mergewith(+,total_psd, Dict((:s,[i,j,t,p,a,b,c,q]) => [-1;;]))
+                    total_psd=mergewith(+,total_psd, Dict((:s,[i,j,t,p,a,b,c,q]) => [1;;]))
+
+                    total_psd=mergewith(+,total_psd, Dict((:s,[a,b,c,q,i,j,t,p]) => [-1;;]))
+                    total_psd=mergewith(+,total_psd, Dict((:s,[a,b,c,q,i,j,t,p]) => [1;;]))
+                end
 
             end
-        end
-    end
-   
-    for (i,j,t,p) in no_rep_key
-        
-        total_psd=Dict()
-        total_free=Dict()
 
-        for (a, b, c, q) in keys(f4) 
-        
-            if t - p == c - q && [i, j, i + j - t - p] in collect(permutations((a, b, a + b - c - q)))
-
-                total_psd=mergewith(+,total_psd,y[f4[a, b, c, q]+1])
-                total_psd=mergewith(+,total_psd, Q_psd[a+b-c-q])
-                        
-            end
+            total_psd=mergewith(+,total_psd,y[f4[i, j, t, p]+1])
+            total_psd=mergewith(+,total_psd, Q_psd[i+j-t-p])
+            
+            con = Constraint(0, total_psd, total_free)
+            push!(constraints, con)
         end
-        con = Constraint(0, total_psd, total_free)
-        push!(constraints, con)
     end   
+
+    # no_rep_key=[]
+    # all_sets=[]
+
+    # for (i, j, t, p) in keys(f4)
+    #     if (t - p) % 2 == 0 && i != 0 && j != 0 && i+j-t-p !=0
+        
+    #         if (i, j, i + j - t - p, t-p) ∉ all_sets
+                    
+    #             perm=collect(permutations((i, j, i + j - t - p)))
+    #             sets=[(a,b,c,t-p) for (a,b,c) in perm]
+                
+    #             append!(all_sets, sets)
+    #             push!(no_rep_key,(i,j,t,p))
+
+    #         end
+    #     end
+    # end
+   
+    # for (i,j,t,p) in no_rep_key
+        
+    #     total_psd=Dict()
+    #     total_free=Dict()
+
+    #     for (a, b, c, q) in keys(f4) 
+        
+    #         if t - p == c - q && [i, j, i + j - t - p] in collect(permutations((a, b, a + b - c - q)))
+
+    #             total_psd=mergewith(+,total_psd,y[f4[a, b, c, q]+1])
+    #             total_psd=mergewith(+,total_psd, Q_psd[a+b-c-q])
+                        
+    #         end
+    #     end
+    #     con = Constraint(0, total_psd, total_free)
+    #     push!(constraints, con)
+    # end   
 
     #obj
 
@@ -143,7 +170,7 @@ R, x = polynomial_ring(QQ, :x)
 N, z = number_field(x^2 - 3, :z)
 g = sqrt(big(3)) 
 
-n,K,d=[11, 43, 3]
+n,K,d=[8, 9, 3]
 
 f4, size  = f4_fun(n)
 f2, size2 = f2_fun(n)
